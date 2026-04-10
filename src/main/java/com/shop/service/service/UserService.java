@@ -52,7 +52,6 @@ public class UserService {
             throw new RuntimeException("Usuário ou senha inválidos");
         }
 
-
         var token = jwtService.generateToken(user.getEmail());
 
         return new LoginResponse(token, user.getRole());

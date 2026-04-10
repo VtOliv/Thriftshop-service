@@ -11,7 +11,9 @@ import com.shop.service.domain.record.LoginResponse;
 import com.shop.service.service.UserService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -21,6 +23,13 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginRequest request) {
-        return ResponseEntity.ok(userService.login(request));
+    	
+    	log.info("Login attempt for user: {}", request.email());
+    	
+    	var auth = userService.login(request);
+    	
+    	log.info("Login successful for user: {}", request.email());
+    	
+        return ResponseEntity.ok(auth);
     }
 }
