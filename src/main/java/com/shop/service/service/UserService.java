@@ -45,15 +45,15 @@ public class UserService {
     
     public LoginResponse login(LoginRequest loginRequest) {
 
-        var user = userRepository.findByUsername(loginRequest.username())
+        var user = userRepository.findByEmail(loginRequest.email())
                 .orElseThrow(() -> new RuntimeException("Usuário ou senha inválidos"));
 
         if (!passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
             throw new RuntimeException("Usuário ou senha inválidos");
         }
 
-        // Importante: Passar a role no token ou no response para o React Native saber o que mostrar
-        var token = jwtService.generateToken(user.getUsername());
+
+        var token = jwtService.generateToken(user.getEmail());
 
         return new LoginResponse(token, user.getRole());
     }
