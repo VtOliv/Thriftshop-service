@@ -1,4 +1,4 @@
 package com.shop.service.domain.record;
 
-public record LoginResponse(String token) {
+public record LoginResponse(String token, String role) {
 }

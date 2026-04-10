@@ -29,7 +29,8 @@ public class SecurityConfig {
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.cors(Customizer.withDefaults()).csrf(AbstractHttpConfigurer::disable)
 				.authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/auth/**").permitAll()
-						.requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll().anyRequest()
+						.requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
+						.requestMatchers(HttpMethod.POST, "/api/v1/users/register").permitAll().anyRequest()
 						.authenticated())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationProvider(authenticationProvider)

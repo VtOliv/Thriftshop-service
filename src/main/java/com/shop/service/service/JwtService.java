@@ -16,8 +16,7 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
 
-    // Use uma chave de pelo menos 32 caracteres (256 bits)
-    private static final String SECRET_KEY = "sua_chave_secreta_muito_longa_e_segura_aqui";
+    private static final String SECRET_KEY = "brecho_eliana_app";
     private static final long EXPIRATION_TIME = 86400000; // 24 horas
 
     private SecretKey getSigningKey() {

@@ -1,8 +1,8 @@
 package com.shop.service.service;
 
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value; // Para pegar a chave do properties
 
 import com.shop.service.domain.User;
 import com.shop.service.domain.DTO.UserDTO;
@@ -16,25 +16,34 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService {
 
-	private final UserRepository userRepository;
-	private final JwtService jwtService;
+    private final UserRepository userRepository;
+    private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
-	
-	public void createUser(UserDTO userDTO) {
-		
-		var password = BCrypt.hashpw(userDTO.getPassword(), BCrypt.gensalt());
-		
-		var user = User.builder()
-				.username(userDTO.getUsername())
-				.email(userDTO.getEmail())
-				.password(password)
-				.role(userDTO.getRole())
-				.build();
-		
-		userRepository.save(user);
-	}
-	
-	public LoginResponse login(LoginRequest loginRequest) {
+
+    @Value("${app.admin.key:CHAVE_PADRAO_SEGURA}") 
+    private String secretAdminKey;
+
+    public User createUser(UserDTO userDTO) {
+        
+        var encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
+        
+        var definedRole = "CLIENTE";
+        if (userDTO.getAdminKey() != null && userDTO.getAdminKey().equals(secretAdminKey)) {
+            definedRole = "FUNCIONARIO";
+        }
+
+        var user = User.builder()
+                .username(userDTO.getUsername())
+                .email(userDTO.getEmail())
+                .cpf(userDTO.getCpf())
+                .password(encryptedPassword)
+                .role(definedRole) // O sistema decide a Role
+                .build();
+        
+        return userRepository.save(user);
+    }
+    
+    public LoginResponse login(LoginRequest loginRequest) {
 
         var user = userRepository.findByUsername(loginRequest.username())
                 .orElseThrow(() -> new RuntimeException("Usuário ou senha inválidos"));
@@ -43,9 +52,9 @@ public class UserService {
             throw new RuntimeException("Usuário ou senha inválidos");
         }
 
+        // Importante: Passar a role no token ou no response para o React Native saber o que mostrar
         var token = jwtService.generateToken(user.getUsername());
 
-        return new LoginResponse(token);
+        return new LoginResponse(token, user.getRole());
     }
-	
 }

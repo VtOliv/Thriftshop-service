@@ -15,7 +15,11 @@ public class UserDTO {
 	
 	private String email;
 	
+	private String cpf;
+	
 	private String password;
+	
+	private String adminKey;
 	
 	private String role;
 }
