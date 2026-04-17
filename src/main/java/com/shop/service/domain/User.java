@@ -43,7 +43,7 @@ public class User implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return username;
+		return email;
 	}
 
 	// Métodos de controle de conta (retornar true para fins de desenvolvimento)
