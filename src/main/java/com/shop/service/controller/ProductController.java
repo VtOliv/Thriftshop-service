@@ -32,5 +32,29 @@ public class ProductController {
 		
 		return ResponseEntity.ok(products);
 	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<Product> getProductById(String id) {
+		
+		log.info("Received request to get product with id: {}", id);
+		
+		var product = productService.getProductById(id);
+		
+		log.info("Returning product with id: {}", id);
+		
+		return ResponseEntity.ok(product);
+	}
+	
+	@GetMapping("/category/{category}")
+	public ResponseEntity<List<Product>> getProductsByCategory(String category) {
+		
+		log.info("Received request to get products in category: {}", category);
+		
+		var products = productService.getProductsByCategory(category);
+		
+		log.info("Returning {} products in category: {}", products.size(), category);
+		
+		return ResponseEntity.ok(products);
+	}
 
 }

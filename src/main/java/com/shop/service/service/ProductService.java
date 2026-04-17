@@ -18,4 +18,14 @@ public class ProductService {
 	public List<Product> getAllProducts() {
 		return productRepository.findAll();
 	}
+	
+	public Product getProductById(String id) {
+		return productRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+	}
+	
+	public List<Product> getProductsByCategory(String category) {
+		return productRepository.findByCategory(category)
+				.orElseThrow(() -> new RuntimeException("No products found in category: " + category));
+	}
 }
