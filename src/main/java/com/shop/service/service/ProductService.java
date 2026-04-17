@@ -24,8 +24,4 @@ public class ProductService {
 				.orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
 	}
 	
-	public List<Product> getProductsByCategory(String category) {
-		return productRepository.findByCategory(category)
-				.orElseThrow(() -> new RuntimeException("No products found in category: " + category));
-	}
 }
